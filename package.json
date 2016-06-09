@@ -1,0 +1,25 @@
+{
+  "name": "mock_ebe",
+  "version": "0.0.1",
+  "description": "Testing client for the Energy Balancing Engine",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukem512/mock-ebe.git"
+  },
+  "keywords": [
+    "iodicus"
+  ],
+  "author": "Luke Mitchell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lukem512/mock-ebe/issues"
+  },
+  "homepage": "https://github.com/lukem512/mock-ebe",
+  "dependencies": {
+  }
+}
