@@ -21,5 +21,6 @@
   },
   "homepage": "https://github.com/lukem512/mock-ebe",
   "dependencies": {
+    "request": "^2.72.0"
   }
 }
