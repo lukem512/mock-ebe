@@ -17,7 +17,7 @@ function makeEpUri() {
 };
 
 // Make a PATCH request to update a specified device parameter
-var requestUpdateDeviceData = (device_parameter_id, target_value) => {
+var requestUpdateDeviceData = (device_parameter_id, target_value, cb) => {
   let body = {
     target_value
   };
@@ -32,7 +32,10 @@ var requestUpdateDeviceData = (device_parameter_id, target_value) => {
     }
   },
   (err, res, body) => {
-    if (err) { return console.error(err); }
+    if (err) {
+      console.error(err);
+      return cb(err, false);
+    }
 
     switch (res.statusCode) {
       case 200:
@@ -55,6 +58,8 @@ var requestUpdateDeviceData = (device_parameter_id, target_value) => {
       console.error('[HTTP] Unhandled status code (' + res.statusCode + ')');
       break;
     }
+    
+    return cb(err, res.statusCode == 200);
   });
 };
 

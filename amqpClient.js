@@ -13,6 +13,24 @@ var EP_MESSAGING_PASS = process.env.EP_MESSAGING_PASS || "guest";
 var EP_MESSAGING_EXCHANGE_NAME = process.env.EP_MESSAGING_EXCHANGE_NAME || "LES_EVENTS";
 var EP_MESSAGING_QUEUE_NAME = process.env.EP_MESSAGING_QUEUE_NAME || '';
 
+// A list of functions to be called when a message is received
+// A delegate returns 'true' to be removed from this list
+var delegates = [];
+
+// Add a delegate to the list
+var registerDelegate = (cb) => {
+  delegates.push(cb);
+};
+
+// Find a matching function and remove it
+var unregisterDelegate = (cb) => {
+  for (i = delegates.length - 1; i >= 0; i--) {
+    if (delegates[i].toString() === cb.toString()) {
+      delegates.splice(i, 1);
+    }
+  }
+};
+
 var connection = amqp.createConnection({
   host: EP_MESSAGING_HOST,
   port: EP_MESSAGING_PORT,
@@ -33,12 +51,17 @@ connection.on('ready', function () {
 
       q.bind(EP_MESSAGING_EXCHANGE_NAME, '#');
 
-      q.subscribe((message, headers, deliveryInfo, messageObj) => {
+      q.subscribe(message => {
         console.log('[AQMP] Received', message);
+
+        delegates.forEach(delegate => {
+          if (delegate(message)) {
+            unregisterDelegate(delegate);
+          }
+        });
       });
   });
 });
 
-// connection.disconnect();
-
-module.exports.connection = connection;
+module.exports.registerDelegate = registerDelegate;
+module.exports.unregisterDelegate = unregisterDelegate;
