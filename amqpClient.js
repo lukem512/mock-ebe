@@ -40,19 +40,18 @@ var connection = amqp.createConnection({
 
 connection.on('error', e => {
   console.error('[AMQP] Error', e);
-  process.exit(1);
 });
 
 connection.on('ready', function () {
   console.log('[AMQP] Connected to', EP_MESSAGING_HOST);
 
   connection.queue(EP_MESSAGING_QUEUE_NAME, q => {
-      console.log('[AQMP] Queue ' + q.name + ' is open');
+      console.log('[AMQP] Queue ' + q.name + ' is open');
 
       q.bind(EP_MESSAGING_EXCHANGE_NAME, '#');
 
       q.subscribe(message => {
-        console.log('[AQMP] Received', message);
+        console.log('[AMQP] Received', message);
 
         delegates.forEach(delegate => {
           if (delegate(message)) {

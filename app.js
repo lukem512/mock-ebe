@@ -7,41 +7,37 @@ var amqpClient = require('./amqpClient');
 
 // Register delegates with the AMQP client, if the device and parameter
 // reference identifiers match then a callback is executed
-// TODO: what is the message format? THIS PROBABLY WONT WORK
 // TODO: test
 // TODO: maybe a timeout or something to indicate failure?
-var registerReceivePushNotification = (DRefID, DPID, expected_value, cb) => {
+var registerReceivePushNotification = (device_parameter, expected_value, cb) => {
   // This is a JavaScript closure and allows specific values
   // to be encoded into an anonymous function definition
-  var delegate = (function(DRefID, DPID, expected_value, cb) {
-    return function(message){
-      let obj = JSON.parse(message);
+  var delegate = (function(device_parameter, expected_value, cb) {
+    return function(obj){
       let found = false;
 
-      let DDDO = obj.Data.GDDO.ZNDS.DDDO;
-      DDDO.some(dddo => {
-        if (dddo.DRefID == DRefID && dddo.DPID == DPID) {
-          dddo.DPDO.some(dpdo => {
-            if (dpdo.CV.toString() == expected_value.toString()) {
-              // The message matches the expected change in device parameter
-              // Forward it onto the callback
-              cb(obj);
-              found = true;
-            }
+      /* { previous: 105,
+      current: 123,
+      type: '112',
+      action: 'change_record',
+      site: 'secure_testsite',
+      device_parameter: 114,
+      trigger: 'OD',
+      time: '2016-06-13T10:34:23.850940+00:00' } */
 
-            // Break the 'some'
-            return found;
-          });
+      if (obj.device_parameter == device_parameter) {
+        if (obj.current.toString() == expected_value.toString()) {
+          // The message matches the expected change in device parameter
+          // Forward it onto the callback
+          cb(obj);
+          found = true;
         }
-
-        // Break the outer 'some'
-        return found;
-      });
+      }
 
       // If the value was found, remove the delegate
       return found;
     };
-  })(DRefID, DPID, expected_value, cb);
+  })(device_parameter, expected_value, cb);
 
   // Register our anonymous delegate
   amqpClient.registerDelegate(delegate);
