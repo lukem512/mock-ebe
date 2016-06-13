@@ -7,8 +7,6 @@ var amqpClient = require('./amqpClient');
 
 // Register delegates with the AMQP client, if the device and parameter
 // reference identifiers match then a callback is executed
-// TODO: test
-// TODO: maybe a timeout or something to indicate failure?
 var registerReceivePushNotification = (device_parameter, expected_value, cb) => {
   // This is a JavaScript closure and allows specific values
   // to be encoded into an anonymous function definition
@@ -46,5 +44,6 @@ var registerReceivePushNotification = (device_parameter, expected_value, cb) => 
 console.log('Mock Energy Balancing Engine is starting...');
 
 // Expose the necessary test methods
+module.exports.connected = amqpClient.connected;
 module.exports.requestUpdateDeviceData = httpClient.requestUpdateDeviceData;
 module.exports.registerReceivePushNotification = registerReceivePushNotification;
