@@ -27,7 +27,7 @@ var registerDelegate = (cb) => {
 
 // Find a matching function and remove it
 var unregisterDelegate = (cb) => {
-  for (i = delegates.length - 1; i >= 0; i--) {
+  for (let i = delegates.length - 1; i >= 0; i--) {
     if (delegates[i].toString() === cb.toString()) {
       delegates.splice(i, 1);
     }
@@ -45,6 +45,11 @@ connection.on('error', e => {
   console.error('[AMQP] Error', e);
 });
 
+connection.on('close', e => {
+  console.error('[AMQP] Connection was closed');
+  connected = false;
+});
+
 connection.on('ready', function () {
   console.log('[AMQP] Connected to', EP_MESSAGING_HOST);
   connected = true;
@@ -55,8 +60,6 @@ connection.on('ready', function () {
       q.bind(EP_MESSAGING_EXCHANGE_NAME, '#');
 
       q.subscribe(message => {
-        console.log('[AMQP] Received', message);
-
         delegates.forEach(delegate => {
           if (delegate(message)) {
             unregisterDelegate(delegate);
@@ -66,6 +69,10 @@ connection.on('ready', function () {
   });
 });
 
-module.exports.connected = connected;
+function isConnected() {
+  return connected;
+};
+
+module.exports.connected = isConnected;
 module.exports.registerDelegate = registerDelegate;
 module.exports.unregisterDelegate = unregisterDelegate;
