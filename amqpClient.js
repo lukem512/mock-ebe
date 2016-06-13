@@ -17,6 +17,9 @@ var EP_MESSAGING_QUEUE_NAME = process.env.EP_MESSAGING_QUEUE_NAME || '';
 // A delegate returns 'true' to be removed from this list
 var delegates = [];
 
+// Boolean flag indicating connection status
+var connected = false;
+
 // Add a delegate to the list
 var registerDelegate = (cb) => {
   delegates.push(cb);
@@ -44,6 +47,7 @@ connection.on('error', e => {
 
 connection.on('ready', function () {
   console.log('[AMQP] Connected to', EP_MESSAGING_HOST);
+  connected = true;
 
   connection.queue(EP_MESSAGING_QUEUE_NAME, q => {
       console.log('[AMQP] Queue ' + q.name + ' is open');
@@ -62,5 +66,6 @@ connection.on('ready', function () {
   });
 });
 
+module.exports.connected = connected;
 module.exports.registerDelegate = registerDelegate;
 module.exports.unregisterDelegate = unregisterDelegate;
