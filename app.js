@@ -13,7 +13,7 @@ var amqpClient = require('./amqpClient');
 var registerReceivePushNotification = (DRefID, DPID, expected_value, cb) => {
   // This is a JavaScript closure and allows specific values
   // to be encoded into an anonymous function definition
-  var delegate = (function(DRefID, DPRefID, expected_value, cb) {
+  var delegate = (function(DRefID, DPID, expected_value, cb) {
     return function(message){
       let obj = JSON.parse(message);
       let found = false;
@@ -41,7 +41,7 @@ var registerReceivePushNotification = (DRefID, DPID, expected_value, cb) => {
       // If the value was found, remove the delegate
       return found;
     };
-  })(DRefID, DPRefID, expected_value, cb);
+  })(DRefID, DPID, expected_value, cb);
 
   // Register our anonymous delegate
   amqpClient.registerDelegate(delegate);
