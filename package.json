@@ -22,6 +22,8 @@
   "homepage": "https://github.com/lukem512/mock-ebe",
   "dependencies": {
     "amqp": "^0.2.6",
+    "express": "^4.13.4",
+    "node-socket-ipc": "github:lukem512/node-socket-ipc",
     "request": "^2.72.0"
   }
 }

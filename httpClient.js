@@ -17,49 +17,52 @@ function makeEpUri() {
 };
 
 // Make a PATCH request to update a specified device parameter
-var requestUpdateDeviceData = (device_parameter_id, target_value, cb) => {
+// This is a promise indicating whether the request was successful
+var requestUpdateDeviceData = function(device_parameter_id, target_value) {
   let body = {
     target_value
   };
 
-  request({
-    uri: makeEpUri() + '/api/device_parameter/' + device_parameter_id,
-    method: 'PATCH',
-    body,
-    json: true,
-    headers: {
-      'Authorization': 'Token ' + EP_AUTHORIZATION_TOKEN
-    }
-  },
-  (err, res, body) => {
-    if (err) {
-      console.error(err);
-      return cb(err, false);
-    }
+  return new Promise((resolve, reject) => {
+    request({
+      uri: makeEpUri() + '/api/device_parameter/' + device_parameter_id,
+      method: 'PATCH',
+      body,
+      json: true,
+      headers: {
+        'Authorization': 'Token ' + EP_AUTHORIZATION_TOKEN
+      }
+    },
+    (err, res, body) => {
+      if (err) {
+        console.error(err);
+        return reject(err, false);
+      }
 
-    switch (res.statusCode) {
-      case 200:
-      console.log('[HTTP] Update request returned success', res.body);
-      break;
+      switch (res.statusCode) {
+        case 200:
+        console.log('[HTTP] Update request returned success', res.body);
+        break;
 
-      case 401:
-      console.error('[HTTP] Not authorized - try a different token');
-      break;
+        case 401:
+        console.error('[HTTP] Not authorized - try a different token');
+        break;
 
-      case 404:
-      console.error('[HTTP] Device not found');
-      break;
+        case 404:
+        console.error('[HTTP] Device not found');
+        break;
 
-      case 500:
-      console.error('[HTTP] Internal server error');
-      break;
+        case 500:
+        console.error('[HTTP] Internal server error');
+        break;
 
-      default:
-      console.error('[HTTP] Unhandled status code (' + res.statusCode + ')');
-      break;
-    }
-    
-    return cb(err, res.statusCode == 200);
+        default:
+        console.error('[HTTP] Unhandled status code (' + res.statusCode + ')');
+        break;
+      }
+
+      resolve(res.statusCode == 200);
+    });
   });
 };
 
