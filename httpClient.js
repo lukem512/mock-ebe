@@ -8,6 +8,8 @@ var EP_API_HOST = process.env.EP_API_HOST || "localhost";
 var EP_API_PORT = process.env.EP_API_PORT || 8000;
 var EP_API_SSL = process.env.EP_API_SSL || false;
 
+let LOG_PREFIX = process.env.LOG_PREFIX || '[EBE]';
+
 var EP_AUTHORIZATION_TOKEN = process.env.EP_AUTHORIZATION_TOKEN;
 
 // Construct the URL of the REST API
@@ -35,29 +37,29 @@ var requestUpdateDeviceData = function(device_parameter_id, target_value) {
     },
     (err, res, body) => {
       if (err) {
-        console.error(err);
+        console.error(LOG_PREFIX + '[HTTP] Error', err);
         return reject(err, false);
       }
 
       switch (res.statusCode) {
         case 200:
-        console.log('[EBE][HTTP] Update request returned success', res.body);
+        console.log(LOG_PREFIX + '[HTTP] Update request returned success', res.body);
         break;
 
         case 401:
-        console.error('[EBE][HTTP] Not authorized - try a different token');
+        console.error(LOG_PREFIX + '[HTTP] Not authorized - try a different token');
         break;
 
         case 404:
-        console.error('[EBE][HTTP] Device not found');
+        console.error(LOG_PREFIX + '[HTTP] Device not found');
         break;
 
         case 500:
-        console.error('[EBE][HTTP] Internal server error');
+        console.error(LOG_PREFIX + '[HTTP] Internal server error');
         break;
 
         default:
-        console.error('[EBE][HTTP] Unhandled status code (' + res.statusCode + ')');
+        console.error(LOG_PREFIX + '[HTTP] Unhandled status code (' + res.statusCode + ')');
         break;
       }
 
