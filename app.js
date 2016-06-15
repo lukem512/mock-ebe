@@ -2,7 +2,7 @@
 
 // Mock Energy Balancing Engine
 // Luke Mitchell, 09/06/2016
-console.log('Mock Energy Balancing Engine is starting...');
+console.log('[EBE] Mock Energy Balancing Engine is starting...');
 
 var httpClient = require('./httpClient');
 var amqpClient = require('./amqpClient');

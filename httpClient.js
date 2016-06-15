@@ -41,23 +41,23 @@ var requestUpdateDeviceData = function(device_parameter_id, target_value) {
 
       switch (res.statusCode) {
         case 200:
-        console.log('[HTTP] Update request returned success', res.body);
+        console.log('[EBE][HTTP] Update request returned success', res.body);
         break;
 
         case 401:
-        console.error('[HTTP] Not authorized - try a different token');
+        console.error('[EBE][HTTP] Not authorized - try a different token');
         break;
 
         case 404:
-        console.error('[HTTP] Device not found');
+        console.error('[EBE][HTTP] Device not found');
         break;
 
         case 500:
-        console.error('[HTTP] Internal server error');
+        console.error('[EBE][HTTP] Internal server error');
         break;
 
         default:
-        console.error('[HTTP] Unhandled status code (' + res.statusCode + ')');
+        console.error('[EBE][HTTP] Unhandled status code (' + res.statusCode + ')');
         break;
       }
 

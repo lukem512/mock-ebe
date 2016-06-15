@@ -22,23 +22,23 @@ var connection = amqp.createConnection({
 });
 
 connection.on('error', e => {
-  console.error('[AMQP] Error', e);
+  console.error('[EBE][AMQP] Error', e.code);
 });
 
 connection.on('close', e => {
-  console.error('[AMQP] Connection was closed');
+  console.error('[EBE][AMQP] Connection was closed');
 });
 
 connection.on('ready', function () {
-  console.log('[AMQP] Connected to', EP_MESSAGING_HOST);
+  console.log('[EBE][AMQP] Connected to', EP_MESSAGING_HOST);
 
   connection.queue(EP_MESSAGING_QUEUE_NAME, q => {
-      console.log('[AMQP] Queue ' + q.name + ' is open');
+      console.log('[EBE][AMQP] Queue ' + q.name + ' is open');
 
       q.bind(EP_MESSAGING_EXCHANGE_NAME, '#');
 
       q.subscribe(message => {
-        console.log('[AMQP] Received a message', message)
+        console.log('[EBE][AMQP] Received a message', message)
         socket.publish('receive', message);
       });
   });
