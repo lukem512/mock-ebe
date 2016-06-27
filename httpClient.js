@@ -47,7 +47,7 @@ var requestUpdateDeviceData = function(device_parameter_id, target_value) {
         break;
 
         case 401:
-        console.error(LOG_PREFIX + '[HTTP] Not authorized - try a different token');
+        console.error(LOG_PREFIX + '[HTTP] Not authorized:', res.body.detail);
         break;
 
         case 404:
