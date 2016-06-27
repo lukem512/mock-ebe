@@ -25,14 +25,17 @@ var requestUpdateDeviceData = function(device_parameter_id, target_value) {
     target_value
   };
 
+  let auth_header = 'Token ' + EP_AUTHORIZATION_TOKEN;
+  console.log(auth_header)
+
   return new Promise((resolve, reject) => {
-    request({
+    let req = request({
       uri: makeEpUri() + '/api/device_parameter/' + device_parameter_id,
       method: 'PATCH',
       body,
       json: true,
       headers: {
-        'Authorization': 'Token ' + EP_AUTHORIZATION_TOKEN
+        'Authorization': auth_header
       }
     },
     (err, res, body) => {
