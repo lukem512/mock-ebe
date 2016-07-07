@@ -15,5 +15,5 @@ To install the test you must clone this module and its dependencies:
 To run the mock EBE client the following command is used, specifying the message queue host in `EP_MESSAGING_HOST`, the correct port to connect to the message queue and a valid user token.
 
 ```
-  EP_MESSAGING_HOST='EP_MESSAGING_HOST_HERE' EP_MESSAGING_PORT=5675 EP_AUTHORIZATION_TOKEN='YOUR_EP_TOKEN_HERE' SOCKET_PORT=3001 npm start
+  EP_API_HOST='EP_WEB_HOST_HERE' EP_MESSAGING_HOST='EP_MESSAGING_HOST_HERE' EP_MESSAGING_PORT=5672 EP_AUTHORIZATION_TOKEN='YOUR_EP_TOKEN_HERE' SOCKET_PORT=3001 npm start
 ```
